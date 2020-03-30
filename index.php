@@ -1,5 +1,8 @@
 <?php
 
+    include_once './config/database.php';
+    include_once './models/students.php';
+
     // Récéption du json
     $json = file_get_contents("http://localhost:8888/API-PULV/students/read.php");
     $students = json_decode($json);
@@ -25,46 +28,80 @@
             <form method="POST" >
                 <div class="form-group">
                     <label for="formGroupExampleInput">Prénom</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Quentin">
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Quentin" name="firstname">
                 </div>
                 <div class="form-group">
                     <label for="formGroupExampleInput">Nom</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Guerrier">
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Guerrier" name="lastname">
                 </div>
                 <div class="form-group">
                     <label for="formGroupExampleInput">Date de naissance</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="21/10/1998 (hésitez pas pour les cadeaux)">
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="21/10/1998 (hésitez pas pour les cadeaux)" name="birthday">
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Email</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" name="email">
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Mot de passe</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputPassword">
+                        <input type="password" class="form-control" id="inputPassword" name="password">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Classe</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <select class="form-control" id="Select" name="class">
+                        <option value="DW1">DW1</option>
+                        <option value="DW2">DW2</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="formGroupExampleInput">Adresse postal</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="2 avenue des champs élysée 75001">
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="2 avenue des champs élysée 75001" name="adress">
                 </div>
                 <div class="form-group">
                     <label for="formGroupExampleInput">Téléphone</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="0670****** (je vais pas te donner mon num)">
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="0670****** (je vais pas te donner mon num)" name="phone">
                 </div>
-                <button type="submit" class="btn btn-primary">Ajouté</button>
+                <button type="submit" class="btn btn-primary" name="submited">Ajouté</button>
             </form>
+            <?php
+
+                // Récupération de la connection a la bdd
+                $database = new Database();
+                $db = $database->getConnection();
+        
+                // Création de l'objet étudiant
+                $student = new Students($db);
+
+                // Vérification de la class
+
+                // Vérification si les champs sont bien remplie
+
+                if(!isset($_POST['submited'])){
+                    // on peuple l'objet student
+                    $student->id_student = uniqid();
+                    $student->firstname = $_POST["firstname"];
+                    $student->lastname = $_POST["lastname"];
+                    $student->id_class = $_POST["class"];
+                    $student->INE = uniqid();
+                    $student->adress = $_POST["adress"];
+                    $student->phone = $_POST["phone"];
+                    $student->birthday = $_POST["birthday"];
+                    $student->email_student = $_POST["email"];
+                    $student->password_student = $_POST["password"];
+
+                    if($student->addStudent()){
+                        echo "L'étudiant a bien été ajouté";
+                    }
+                    else{
+                        echo "Un probléme est survenu";
+                    }
+                }
+                else{
+                    echo "vous n'avez pas envoyer le formulaire";
+                }
+            ?>
         </div>
         <div class="form-classroom">
 
@@ -81,7 +118,7 @@
                     <th scope="col">Nom</th>
                     <th scope="col">INE</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Password</th>
+                    <th scope="col">Mot de passe</th>
                 </tr>
             </thead>
             <tbody>
