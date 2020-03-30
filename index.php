@@ -1,3 +1,11 @@
+<?php
+
+    // Récéption du json
+    $json = file_get_contents("http://localhost:8888/API-PULV/students/read.php");
+    $students = json_decode($json);
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -14,7 +22,7 @@
     <div class="add">
         <div class="form-student">
             <h2>Ajout d'un étudiant</h2>
-            <form>
+            <form method="POST" >
                 <div class="form-group">
                     <label for="formGroupExampleInput">Prénom</label>
                     <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Quentin">
@@ -61,6 +69,38 @@
         <div class="form-classroom">
 
         </div>
+    </div>
+
+    <div class="students">
+        <h2>Tous les étudiants</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">INE</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    foreach ($students->Students as $student) {
+                        ?>
+                        <tr>
+                            <th scope="row"><?php echo $student->id; ?></th>
+                            <td><?php echo $student->firstname; ?></td>
+                            <td><?php echo $student->lastname; ?></td>
+                            <td><?php echo $student->INE; ?></td>
+                            <td><?php echo $student->email_student; ?></td>
+                            <td><?php echo $student->password_student; ?></td>
+                        </tr>
+                        <?php
+                    }
+                ?>
+            </tbody>
+        </table>
     </div>
 
 

@@ -28,3 +28,9 @@ h1{
 .form-classroom{
     width: 50%;
 }
+
+.students{
+    width: 100vw;
+    height: auto;
+    padding: 50px 100px 50px 100px;
+}
