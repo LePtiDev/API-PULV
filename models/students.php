@@ -50,16 +50,16 @@
             $this->password_student=htmlspecialchars(strip_tags($this->password_student));
 
             // Ajouts des valeurs au clés
-            $response->bindParam("id_student", $this->id_student);
-            $response->bindParam("firstname", $this->firstname);
-            $response->bindParam("lastname", $this->lastname);
-            $response->bindParam("id_class", $this->id_class);
-            $response->bindParam("INE", $this->INE);
-            $response->bindParam("adress", $this->adress);
-            $response->bindParam("phone", $this->phone);
-            $response->bindParam("birthday", $this->birthday);
-            $response->bindParam("email_student", $this->email_student);
-            $response->bindParam("firstname", $this->password_student);
+            $response->bindParam(":id_student", $this->id_student);
+            $response->bindParam(":firstname", $this->firstname);
+            $response->bindParam(":lastname", $this->lastname);
+            $response->bindParam(":id_class", $this->id_class);
+            $response->bindParam(":INE", $this->INE);
+            $response->bindParam(":adress", $this->adress);
+            $response->bindParam(":phone", $this->phone);
+            $response->bindParam(":birthday", $this->birthday);
+            $response->bindParam(":email_student", $this->email_student);
+            $response->bindParam(":firstname", $this->password_student);
 
             if($response->execute()){
                 return true;

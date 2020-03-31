@@ -1,8 +1,5 @@
 <?php
 
-    include_once './config/database.php';
-    include_once './models/students.php';
-
     // Récéption du json
     $json = file_get_contents("http://localhost:8888/API-PULV/students/read.php");
     $students = json_decode($json);
@@ -67,12 +64,19 @@
             </form>
             <?php
 
+                include_once './config/database.php';
+                include_once './models/students.php';
+
                 // Récupération de la connection a la bdd
                 $database = new Database();
                 $db = $database->getConnection();
         
                 // Création de l'objet étudiant
                 $student = new Students($db);
+
+                //préparation de la requete
+                $requete = "INSERT INTO Students SET id_student=:id_student, firstname=:firstname, lastname=:lastname, id_class=:id_class, INE=:INE, adress=:adress, phone=:phone, birthday=:birthday, email_student=:email_student, password_student=:password_student";
+                $response = $db->prepare($requete);
 
                 // Vérification de la class
 
@@ -81,24 +85,30 @@
                 
 
                 if(!empty($_POST['submited'])){
-                    // on peuple l'objet student
-                    $student->id_student = uniqid();
-                    $student->firstname = $_POST["firstname"];
-                    $student->lastname = $_POST["lastname"];
-                    $student->id_class = $_POST["class"];
-                    $student->INE = uniqid();
-                    $student->adress = $_POST["adress"];
-                    $student->phone = $_POST["phone"];
-                    $student->birthday = $_POST["birthday"];
-                    $student->email_student = $_POST["email"];
-                    $student->password_student = $_POST["password"];
 
-                    if($student->addStudent()){
-                        echo "L'étudiant a bien été ajouté";
-                    }
-                    else{
-                        echo "Un probléme est survenu";
-                    }
+                    $INE = uniqid();
+                    $id_student = uniqid();
+
+                    // Ajouts des valeurs au clés
+                    $response->bindParam(":id_student", $id_student);
+                    $response->bindParam(":firstname", $_POST["firstname"]);
+                    $response->bindParam(":lastname", $_POST["lastname"]);
+                    $response->bindParam(":id_class", $_POST["class"]);
+                    $response->bindParam(":INE", $INE);
+                    $response->bindParam(":adress", $_POST["adress"]);
+                    $response->bindParam(":phone", $_POST["phone"]);
+                    $response->bindParam(":birthday", $_POST["birthday"]);
+                    $response->bindParam(":email_student", $_POST["email"]);
+                    $response->bindParam(":firstname", $_POST["password"]);
+
+                    var_dump($response);
+
+                    // if($response->execute()){
+                    //     echo "L'étudiant a bien été ajouté";
+                    // }
+                    // else{
+                    //     echo "Un probléme est survenu";
+                    // }
                 }
                 else{
                     echo "vous n'avez pas envoyer le formulaire";
