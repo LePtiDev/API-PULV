@@ -63,7 +63,7 @@
                     <label for="formGroupExampleInput">Téléphone</label>
                     <input type="text" class="form-control" id="formGroupExampleInput" placeholder="0670****** (je vais pas te donner mon num)" name="phone">
                 </div>
-                <button type="submit" class="btn btn-primary" name="submited">Ajouté</button>
+                <input type="submit" class="btn btn-primary" name="submited" value="Ajouté">
             </form>
             <?php
 
@@ -78,7 +78,9 @@
 
                 // Vérification si les champs sont bien remplie
 
-                if(!isset($_POST['submited'])){
+                
+
+                if(!empty($_POST['submited'])){
                     // on peuple l'objet student
                     $student->id_student = uniqid();
                     $student->firstname = $_POST["firstname"];
